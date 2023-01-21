@@ -9,7 +9,7 @@ import java.util.Collection;
 @Service
 public class SimpleAccidentService implements AccidentService {
 
-    AccidentMem accidentMem;
+    private AccidentMem accidentMem;
 
     public SimpleAccidentService(AccidentMem accidentMem) {
         this.accidentMem = accidentMem;
