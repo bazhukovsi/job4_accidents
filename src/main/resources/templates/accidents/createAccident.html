@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
@@ -15,10 +15,10 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <title>Автомобильные инциденты</title>
+    <title>Автомобильные инцеденты</title>
 </head>
 <body>
-<div class="container-fluid p-0">
+<div class="container-fluid p-0 mb-5">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#">Автомобильные инциденты</a>
@@ -40,28 +40,30 @@
             </div>
         </div>
     </nav>
-    <br>
-    <br>
-    <div class="container">
-        <div class="row" style="overflow-y: auto; max-height: 600px">
-            <table class="table table-success table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Инцидент</th>
-                    <th scope="col">Описание инцидента</th>
-                    <th scope="col">Адрес события</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="accident: ${accidents}">
-                    <td th:text="${accident.id}"></td>
-                    <td><a th:text="${accident.name}" th:href="@{/accidents/{accidentId}(accidentId=${accident.id})}"></a></td>
-                    <td th:text="${accident.description}"></td>
-                    <td th:text="${accident.address}"></td>
-                </tr>
-                </tbody>
-            </table>
+</div>
+    <div class="row pt-3 mx-5">
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                <strong>Новый инцидент</strong>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/saveAccident}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="0"/>
+                    <div class="form-group">
+                        <label for="name" style="color: crimson">Инцидент</label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="description" style="color: green">Описание инцидента</label>
+                        <input type="text" class="form-control" name="description" id="description">
+                    </div>
+                    <div class="form-group">
+                        <label for="address" style="color: mediumblue">Адрес регистрации инцидента</label>
+                        <input type="text" class="form-control" name="address" id="address">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

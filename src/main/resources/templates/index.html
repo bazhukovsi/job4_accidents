@@ -25,13 +25,13 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Главная<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" th:href="@{/index}">Главная<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Нарушения</a>
+                        <a class="nav-link" th:href="@{/accidents}">Нарушения</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ввод автонарушения</a>
+                        <a class="nav-link" th:href="@{/addAccident}">Ввод автонарушения</a>
                     </li>
                 </ul>
                 <span class="navbar-text">
@@ -53,10 +53,9 @@
                     <th scope="col">Адрес события</th>
                 </tr>
                 </thead>
-                <tbody>
                 <tr th:each="accident: ${accidents}">
                     <td th:text="${accident.id}"></td>
-                    <td th:text="${accident.name}"></td>
+                    <td><a th:text="${accident.name}" th:href="@{/accidents/{accidentId}(accidentId=${accident.id})}"></a></td>
                     <td th:text="${accident.description}"></td>
                     <td th:text="${accident.address}"></td>
                 </tr>

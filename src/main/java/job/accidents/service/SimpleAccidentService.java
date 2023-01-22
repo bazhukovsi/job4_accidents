@@ -5,6 +5,7 @@ import job.accidents.repository.AccidentMem;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class SimpleAccidentService implements AccidentService {
@@ -23,5 +24,20 @@ public class SimpleAccidentService implements AccidentService {
     @Override
     public Collection<Accident> findAll() {
         return accidentMem.findAll();
+    }
+
+    @Override
+    public Optional<Accident> findById(int id) {
+        return accidentMem.findById(id);
+    }
+
+    @Override
+    public boolean update(Accident accident) {
+        return accidentMem.update(accident);
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        return accidentMem.deleteById(id);
     }
 }
