@@ -14,6 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <title>Автомобильные инциденты</title>
 </head>
@@ -49,15 +50,20 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Инцидент</th>
-                    <th scope="col">Описание инцидента</th>
-                    <th scope="col">Адрес события</th>
+                    <th scope="col">Действия</th>
+<!--                    <th scope="col">Адрес события</th>-->
                 </tr>
                 </thead>
                 <tr th:each="accident: ${accidents}">
                     <td th:text="${accident.id}"></td>
-                    <td><a th:text="${accident.name}" th:href="@{/accidents/{accidentId}(accidentId=${accident.id})}"></a></td>
-                    <td th:text="${accident.description}"></td>
-                    <td th:text="${accident.address}"></td>
+                    <td th:text="${accident.name}"></td>
+                    <td>
+                        <a th:href="@{|/formUpdateAccident?id=${accident.id}|}">
+                            <i class="fa fa-edit">&nbsp;&nbsp;&nbsp;Редактировать имя инцидента</i>
+                        </a>
+                    </td>
+<!--                    <td th:text="${accident.description}"></td>-->
+<!--                    <td th:text="${accident.address}"></td>-->
                 </tr>
                 </tbody>
             </table>
