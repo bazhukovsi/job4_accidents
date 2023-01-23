@@ -16,4 +16,8 @@ public class Accident {
     private String description;
     private String address;
     private AccidentType type;
+
+    public AccidentType getType() {
+        return type;
+    }
 }

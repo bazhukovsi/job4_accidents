@@ -1,8 +1,9 @@
 package job.accidents.controller;
 
 import job.accidents.model.Accident;
+import job.accidents.model.AccidentType;
 import job.accidents.service.SimpleAccidentService;
-import job.accidents.service.TypeService;
+import job.accidents.repository.TypeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccidentControl {
     private final SimpleAccidentService accidentService;
-    private final TypeService typeService;
+    private final TypeRepository typeRepository;
 
     /**
      * Вывод таблицы инцидентов
@@ -37,13 +38,13 @@ public class AccidentControl {
 
     @GetMapping("/addAccident")
     public String viewCreateAccident(Model model) {
-        model.addAttribute("types", typeService.getAllTypes());
+        model.addAttribute("types", typeRepository.getAllTypes());
         return "accidents/createAccident";
     }
 
     @PostMapping("/create")
     public String create(@ModelAttribute Accident accident, Model model, @RequestParam("type.id") int id) {
-        accident.setType(typeService.findById(id));
+        accident.setType(typeRepository.findById(id));
         accidentService.save(accident);
         return "redirect:/accidents";
     }
@@ -63,13 +64,17 @@ public class AccidentControl {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");
             return "errors/404";
         }
+        AccidentType accidentType = typeRepository.findById(accidentService.findById(id).get().getType().getId());
+        model.addAttribute("types", typeRepository.getAllTypes());
+        model.addAttribute("typeID", accidentType.getId());
         model.addAttribute("accident", accidentOptional.get());
         return "accidents/editAccident";
 
     }
 
     @PostMapping("/updateAccident")
-    public String update(@ModelAttribute Accident accident, Model model) {
+    public String update(@ModelAttribute Accident accident, Model model, @RequestParam("type.id") int id) {
+        accident.setType(typeRepository.findById(id));
         var isUpdated = accidentService.update(accident);
         if (!isUpdated) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");

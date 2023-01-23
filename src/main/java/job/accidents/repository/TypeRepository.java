@@ -1,18 +1,18 @@
-package job.accidents.service;
+package job.accidents.repository;
 
 import job.accidents.model.AccidentType;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class TypeService {
+@Repository
+public class TypeRepository {
     private final Map<Integer, AccidentType> types = new HashMap<>();
 
-    public TypeService() {
+    public TypeRepository() {
         types.put(1, new AccidentType(1, "Две машины"));
         types.put(2, new AccidentType(2, "Машина и человек"));
         types.put(3, new AccidentType(3, "Машина и велосипед"));
