@@ -2,19 +2,23 @@ package job.accidents.controller;
 
 import job.accidents.model.Accident;
 import job.accidents.service.SimpleAccidentService;
+import job.accidents.service.TypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
 public class AccidentControl {
     private final SimpleAccidentService accidentService;
+    private final TypeService typeService;
 
     /**
      * Вывод таблицы инцидентов
+     *
      * @param model
      * @return
      */
@@ -27,27 +31,26 @@ public class AccidentControl {
 
     /**
      * Ввод инцидента
+     *
      * @return
      */
 
     @GetMapping("/addAccident")
-    public String viewCreateAccident() {
+    public String viewCreateAccident(Model model) {
+        model.addAttribute("types", typeService.getAllTypes());
         return "accidents/createAccident";
     }
 
-    @PostMapping("/saveAccident")
-    public String create(@ModelAttribute Accident accident, Model model) {
-        try {
-            accidentService.save(accident);
-            return "redirect:/accidents";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
-            return "errors/404";
-        }
+    @PostMapping("/create")
+    public String create(@ModelAttribute Accident accident, Model model, @RequestParam("type.id") int id) {
+        accident.setType(typeService.findById(id));
+        accidentService.save(accident);
+        return "redirect:/accidents";
     }
 
     /**
      * Редактирование инцидента (все поля)
+     *
      * @param model
      * @param id
      * @return
@@ -67,21 +70,17 @@ public class AccidentControl {
 
     @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident, Model model) {
-        try {
-            var isUpdated = accidentService.update(accident);
-            if (!isUpdated) {
-                model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");
-                return "errors/404";
-            }
-            return "redirect:/accidents";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        var isUpdated = accidentService.update(accident);
+        if (!isUpdated) {
+            model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");
             return "errors/404";
         }
+        return "redirect:/accidents";
     }
 
     /**
      * Удаление инцидента
+     *
      * @param model
      * @param id
      * @return
@@ -99,6 +98,7 @@ public class AccidentControl {
 
     /**
      * Редактирование инцидента (только название инцидента)
+     *
      * @param model
      * @param id
      * @return
