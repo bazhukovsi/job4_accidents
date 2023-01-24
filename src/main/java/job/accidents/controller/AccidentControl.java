@@ -1,10 +1,8 @@
 package job.accidents.controller;
 
 import job.accidents.model.Accident;
-import job.accidents.model.AccidentType;
 import job.accidents.service.SimpleAccidentService;
-import job.accidents.repository.TypeRepository;
-import lombok.AllArgsConstructor;
+import job.accidents.service.SimpleTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@AllArgsConstructor
 public class AccidentControl {
     private final SimpleAccidentService accidentService;
-    private final TypeRepository typeRepository;
+    private final SimpleTypeService typeService;
+
+    public AccidentControl(SimpleAccidentService accidentService, SimpleTypeService typeService) {
+        this.accidentService = accidentService;
+        this.typeService = typeService;
+    }
 
     /**
      * Вывод таблицы инцидентов
@@ -38,13 +40,13 @@ public class AccidentControl {
 
     @GetMapping("/addAccident")
     public String viewCreateAccident(Model model) {
-        model.addAttribute("types", typeRepository.getAllTypes());
+        model.addAttribute("types", typeService.getAllTypes());
         return "accidents/createAccident";
     }
 
     @PostMapping("/create")
     public String create(@ModelAttribute Accident accident, Model model, @RequestParam("type.id") int id) {
-        accident.setType(typeRepository.findById(id));
+        accident.setType(typeService.findById(id));
         accidentService.save(accident);
         return "redirect:/accidents";
     }
@@ -58,23 +60,21 @@ public class AccidentControl {
      */
 
     @GetMapping("/accidents/{id}")
-    public String getById(Model model, @PathVariable int id) {
+    public String getById(Model model,  @PathVariable int id) {
         Optional accidentOptional = accidentService.findById(id);
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");
             return "errors/404";
         }
-        AccidentType accidentType = typeRepository.findById(accidentService.findById(id).get().getType().getId());
-        model.addAttribute("types", typeRepository.getAllTypes());
-        model.addAttribute("typeID", accidentType.getId());
+        model.addAttribute("types", typeService.getAllTypes());
         model.addAttribute("accident", accidentOptional.get());
         return "accidents/editAccident";
 
     }
 
     @PostMapping("/updateAccident")
-    public String update(@ModelAttribute Accident accident, Model model, @RequestParam("type.id") int id) {
-        accident.setType(typeRepository.findById(id));
+    public String update(@ModelAttribute Accident accident, Model model, @RequestParam("id") int id) {
+        accident.setType(typeService.findById(id));
         var isUpdated = accidentService.update(accident);
         if (!isUpdated) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден!");

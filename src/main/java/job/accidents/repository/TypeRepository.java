@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class TypeRepository {
+public class TypeRepository implements TypeInt {
     private final Map<Integer, AccidentType> types = new HashMap<>();
 
     public TypeRepository() {
