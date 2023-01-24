@@ -2,10 +2,15 @@ package job.accidents.service;
 
 import job.accidents.model.AccidentType;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface TypeService {
-    public List<AccidentType> getAllTypes();
+    public Set<AccidentType> findAll();
 
-    public AccidentType findById(int id);
+    public void create(AccidentType type);
+
+    public void update(AccidentType type);
+
+    public Optional<AccidentType> findById(int id);
 }

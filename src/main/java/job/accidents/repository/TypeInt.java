@@ -1,11 +1,17 @@
 package job.accidents.repository;
 
 import job.accidents.model.AccidentType;
-import java.util.List;
+
+import java.util.Optional;
+import java.util.Set;
 
 public interface TypeInt {
-    public List<AccidentType> getAllTypes();
+    public Set<AccidentType> findAll();
 
-    public AccidentType findById(int id);
+    public void create(AccidentType type);
+
+    public void update(AccidentType type);
+
+    public Optional<AccidentType> findById(int id);
 
 }
